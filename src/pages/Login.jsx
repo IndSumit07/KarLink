@@ -13,7 +13,7 @@ const Login = () => {
           <h1 className="text-4xl font-bold text-gray-900 mb-3">Sign in</h1>
           <p className="text-gray-500 mb-10">
             Don't have an account yet?{" "}
-            <Link to="/register" className="text-blue-600 hover:underline font-medium">
+            <Link to="/signup" className="text-blue-600 hover:underline font-medium">
               Sign up here
             </Link>
           </p>

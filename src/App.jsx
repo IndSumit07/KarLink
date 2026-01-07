@@ -3,10 +3,11 @@ import Navbar from "./components/Navbar";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 const App = () => {
   const location = useLocation();
-  const hideNavbarRoutes = ["/login"];
+  const hideNavbarRoutes = ["/login", "/signup"];
   const hideNavbar = hideNavbarRoutes.includes(location.pathname);
   return (
     <>
@@ -14,6 +15,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </>
   );
