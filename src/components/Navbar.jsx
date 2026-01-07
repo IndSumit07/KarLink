@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Sun, LogIn } from "lucide-react";
+import { Menu, X, Sun, LogIn, User } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
 
   const navLinks = [
     { name: "About", path: "/about" },
@@ -54,13 +56,31 @@ const Navbar = () => {
                 <Sun size={20} />
               </button>
 
-              <Link
-                to="/login"
-                className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-5 py-2.5 rounded-lg font-semibold transition-all duration-200 shadow-lg shadow-orange-600/20 hover:shadow-orange-600/30 transform hover:-translate-y-0.5"
-              >
-                <LogIn size={18} />
-                <span>Login</span>
-              </Link>
+              {user ? (
+                <div className="flex items-center gap-2">
+                  {user.user_metadata?.avatar_url ? (
+                    <img
+                      src={user.user_metadata.avatar_url}
+                      alt="Profile"
+                      className="w-10 h-10 rounded-full border-2 border-orange-600 object-cover"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-orange-600 flex items-center justify-center text-white font-bold text-lg border-2 border-orange-600">
+                      {user.user_metadata?.full_name
+                        ? user.user_metadata.full_name.charAt(0).toUpperCase()
+                        : user.email?.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  to="/login"
+                  className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-5 py-2.5 rounded-lg font-semibold transition-all duration-200 shadow-lg shadow-orange-600/20 hover:shadow-orange-600/30 transform hover:-translate-y-0.5"
+                >
+                  <LogIn size={18} />
+                  <span>Login</span>
+                </Link>
+              )}
             </div>
           </div>
 
@@ -101,14 +121,35 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="pt-4 mt-2 border-t border-gray-100">
-            <Link
-              to="/login"
-              className="flex items-center justify-center gap-2 w-full bg-orange-600 text-white px-4 py-3 rounded-lg font-semibold shadow-md active:scale-95 transition-all"
-              onClick={() => setIsOpen(false)}
-            >
-              <LogIn size={20} />
-              Login
-            </Link>
+            {user ? (
+              <div className="flex items-center gap-3 w-full p-2">
+                {user.user_metadata?.avatar_url ? (
+                  <img
+                    src={user.user_metadata.avatar_url}
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full border-2 border-orange-600 object-cover"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-orange-600 flex items-center justify-center text-white font-bold text-lg border-2 border-orange-600">
+                    {user.user_metadata?.full_name
+                      ? user.user_metadata.full_name.charAt(0).toUpperCase()
+                      : user.email?.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="font-semibold text-gray-700">
+                  {user.user_metadata?.full_name || user.email}
+                </span>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="flex items-center justify-center gap-2 w-full bg-orange-600 text-white px-4 py-3 rounded-lg font-semibold shadow-md active:scale-95 transition-all"
+                onClick={() => setIsOpen(false)}
+              >
+                <LogIn size={20} />
+                Login
+              </Link>
+            )}
           </div>
         </div>
       </div>

@@ -5,12 +5,15 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
+import { Toaster } from "react-hot-toast";
+
 const App = () => {
   const location = useLocation();
   const hideNavbarRoutes = ["/login", "/signup"];
   const hideNavbar = hideNavbarRoutes.includes(location.pathname);
   return (
     <>
+      <Toaster position="top-right" />
       {!hideNavbar && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />

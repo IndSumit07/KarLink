@@ -1,9 +1,43 @@
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Package, Users, ShieldCheck } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const { signIn, googleSignIn } = useAuth();
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { error } = await signIn(formData.email, formData.password);
+      if (error) throw error;
+      toast.success("Signed in successfully!");
+      navigate("/");
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const { error } = await googleSignIn();
+      if (error) throw error;
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <div className="w-full h-[100dvh] flex">
@@ -13,16 +47,25 @@ const Login = () => {
           <h1 className="text-4xl font-bold text-gray-900 mb-3">Sign in</h1>
           <p className="text-gray-500 mb-10">
             Don't have an account yet?{" "}
-            <Link to="/signup" className="text-blue-600 hover:underline font-medium">
+            <Link
+              to="/signup"
+              className="text-blue-600 hover:underline font-medium"
+            >
               Sign up here
             </Link>
           </p>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">Email address</label>
+              <label className="block text-gray-700 font-semibold mb-2">
+                Email address
+              </label>
               <input
+                name="email"
                 type="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Enter email address"
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-600 focus:border-transparent outline-none transition-all placeholder-gray-400"
               />
@@ -31,13 +74,20 @@ const Login = () => {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <label className="text-gray-700 font-semibold">Password</label>
-                <Link to="/forgot-password" className="text-blue-600 hover:underline text-sm font-medium">
+                <Link
+                  to="/forgot-password"
+                  className="text-blue-600 hover:underline text-sm font-medium"
+                >
                   Forgot password?
                 </Link>
               </div>
               <div className="relative">
                 <input
+                  name="password"
                   type={showPassword ? "text" : "password"}
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
                   placeholder="Enter password"
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-600 focus:border-transparent outline-none transition-all placeholder-gray-400 pr-10"
                 />
@@ -53,9 +103,10 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full bg-orange-600 text-white font-bold py-3.5 rounded-lg hover:bg-orange-700 active:scale-[0.98] transition-all duration-200 mt-2"
+              disabled={loading}
+              className="w-full bg-orange-600 text-white font-bold py-3.5 rounded-lg hover:bg-orange-700 active:scale-[0.98] transition-all duration-200 mt-2 flex justify-center items-center disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Sign in
+              {loading ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> : "Sign in"}
             </button>
           </form>
 
@@ -64,12 +115,15 @@ const Login = () => {
               <div className="w-full border-t border-gray-200"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-900 font-semibold">Or continue with</span>
+              <span className="px-4 bg-white text-gray-900 font-semibold">
+                Or continue with
+              </span>
             </div>
           </div>
 
           <button
             type="button"
+            onClick={handleGoogleSignIn}
             className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 font-semibold py-3.5 rounded-lg hover:bg-gray-50 transition-all active:scale-[0.98]"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -95,16 +149,78 @@ const Login = () => {
 
           <p className="mt-10 text-center text-xs text-gray-500 max-w-sm mx-auto leading-relaxed">
             By signing in or creating an account, you are agreeing to our{" "}
-            <Link to="/terms" className="text-blue-600 hover:underline">Terms & Conditions</Link>
-            {" "}and our{" "}
-            <Link to="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>.
+            <Link to="/terms" className="text-blue-600 hover:underline">
+              Terms & Conditions
+            </Link>{" "}
+            and our{" "}
+            <Link to="/privacy" className="text-blue-600 hover:underline">
+              Privacy Policy
+            </Link>
+            .
           </p>
         </div>
       </div>
 
       {/* Right Section - Image/Color Information */}
-      <div className="w-1/2 h-full bg-orange-600 hidden md:block">
-        {/* Placeholder for right side content if needed, or leave plain color as per previous code */}
+      <div className="hidden md:flex flex-col justify-center w-1/2 h-full bg-orange-600 text-white p-12 relative overflow-hidden">
+        {/* Background Patterns */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+
+        {/* Abstract Lines Top Right */}
+        <svg className="absolute top-0 right-0 w-64 h-64 opacity-20 pointer-events-none text-white" viewBox="0 0 200 200" fill="none">
+          <path d="M0 20 C 50 20, 50 100, 100 100" stroke="currentColor" strokeWidth="1" fill="none" />
+          <path d="M20 0 C 20 50, 100 50, 100 100" stroke="currentColor" strokeWidth="1" fill="none" />
+          <circle cx="150" cy="50" r="40" stroke="currentColor" strokeWidth="1" />
+        </svg>
+
+        {/* Content Container */}
+        <div className="relative z-10 max-w-lg mx-auto w-full">
+          <h2 className="text-4xl font-bold mb-12 text-center">
+            Welcome to KarLink
+          </h2>
+
+          <div className="space-y-8">
+            {/* Feature 1 */}
+            <div className="flex items-start gap-6 group">
+              <div className="flex-shrink-0 bg-white rounded-2xl w-20 h-20 flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-105 duration-300">
+                <Package className="w-10 h-10 text-orange-600" strokeWidth={1.5} />
+              </div>
+              <div className="pt-1">
+                <h3 className="text-xl font-bold mb-2">Mass Order Requests</h3>
+                <p className="text-orange-100 text-sm leading-relaxed opacity-90">
+                  Post bulk requirements effortlessly and connect with verified providers instantly.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="flex items-start gap-6 group">
+              <div className="flex-shrink-0 bg-white rounded-2xl w-20 h-20 flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-105 duration-300">
+                <Users className="w-10 h-10 text-orange-600" strokeWidth={1.5} />
+              </div>
+              <div className="pt-1">
+                <h3 className="text-xl font-bold mb-2">Verified Providers</h3>
+                <p className="text-orange-100 text-sm leading-relaxed opacity-90">
+                  Connect with top-rated suppliers vetted for quality and reliability.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="flex items-start gap-6 group">
+              <div className="flex-shrink-0 bg-white rounded-2xl w-20 h-20 flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-105 duration-300">
+                <ShieldCheck className="w-10 h-10 text-orange-600" strokeWidth={1.5} />
+              </div>
+              <div className="pt-1">
+                <h3 className="text-xl font-bold mb-2">Secure Transactions</h3>
+                <p className="text-orange-100 text-sm leading-relaxed opacity-90">
+                  Ensure safe and transparent dealings with our secure platform.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
