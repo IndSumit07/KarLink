@@ -84,7 +84,7 @@ const Dashboard = () => {
             <img
               src="/logo.png"
               alt="KarLink"
-              className="w-8 h-8 object-contain shrink-0"
+              className="w-12 h-12 object-contain shrink-0"
             />
             {!isCollapsed && (
               <h1 className="text-xl font-bold text-gray-900 tracking-tight whitespace-nowrap">
