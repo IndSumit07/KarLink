@@ -1,5 +1,4 @@
-import React from "react";
-import { Eye, ShieldCheck, Zap, Globe } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -13,9 +12,9 @@ const Hero = () => {
             with others and grow your business!
           </p>
           <div className="mt-8 flex gap-4">
-            <button className="bg-orange-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-orange-700 transition duration-300 shadow-lg shadow-orange-200 hover:-translate-y-0.5">
+            <Link to="/signup" className="bg-orange-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-orange-700 transition duration-300 shadow-lg shadow-orange-200 hover:-translate-y-0.5">
               Get Started
-            </button>
+            </Link>
             <button className="bg-white text-orange-600 border-2 border-orange-100 px-8 py-3 rounded-xl font-bold hover:bg-orange-50 hover:border-orange-200 transition duration-300 text-gray-700">
               Learn More
             </button>
