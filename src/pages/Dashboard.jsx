@@ -36,7 +36,7 @@ import {
 const Dashboard = () => {
   const location = useLocation();
   const { user, signOut } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(true); // For mobile
+  const [sidebarOpen, setSidebarOpen] = useState(false); // For mobile
   const [isCollapsed, setIsCollapsed] = useState(false); // For desktop
   const navigate = useNavigate();
 
@@ -72,8 +72,8 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-50 flex font-sans">
       {/* Sidebar */}
       <aside
-        className={`bg-white border-r border-gray-200 fixed lg:sticky top-0 h-screen z-40 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0 transition-all duration-300 ease-in-out flex flex-col ${isCollapsed ? "w-20" : "w-64"
+        className={`bg-white border-r border-gray-200 fixed xl:sticky top-0 h-screen z-40 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } xl:translate-x-0 transition-all duration-300 ease-in-out flex flex-col ${isCollapsed ? "w-20" : "w-64"
           }`}
       >
         <div
@@ -94,10 +94,10 @@ const Dashboard = () => {
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className={`lg:hidden text-gray-500 ${isCollapsed ? "hidden" : "block"
+            className={`xl:hidden text-gray-500 ${isCollapsed ? "hidden" : "block"
               }`}
           >
-            <Menu size={20} />
+            <PanelLeft size={20} />
           </button>
         </div>
 
@@ -116,6 +116,7 @@ const Dashboard = () => {
                     <Link
                       key={item.name}
                       to={item.path}
+                      onClick={() => setSidebarOpen(false)}
                       title={isCollapsed ? item.name : ""}
                       className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive
                         ? "bg-orange-50 text-orange-600"
@@ -141,6 +142,7 @@ const Dashboard = () => {
         <div className="p-4 border-t border-gray-100 bg-white">
           <Link
             to="/profile"
+            onClick={() => setSidebarOpen(false)}
             title={isCollapsed ? "Edit Profile" : ""}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors ${isCollapsed ? "justify-center px-2" : ""
               }`}
@@ -165,17 +167,17 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Header */}
-        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
+        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 xl:px-6 sticky top-0 z-30">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded-lg lg:hidden"
+              className="p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded-lg xl:hidden"
             >
-              <Menu size={20} />
+              <PanelLeft size={20} />
             </button>
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="hidden lg:block p-2 -ml-2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="hidden xl:block p-2 -ml-2 text-gray-400 hover:text-gray-600 transition-colors"
             >
               <PanelLeft size={20} />
             </button>
@@ -208,7 +210,7 @@ const Dashboard = () => {
         </header>
 
         {/* Dashboard Content */}
-        <main className="flex-1 p-4 lg:p-8 overflow-y-auto">
+        <main className="flex-1 p-4 xl:p-8 overflow-y-auto">
           {(() => {
             if (location.pathname === "/market") return <Market />;
             if (location.pathname === "/rfq/create") return <CreateRfq />;

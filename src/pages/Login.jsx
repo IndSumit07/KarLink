@@ -40,9 +40,9 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full h-[100dvh] flex">
+    <div className="w-full min-h-screen md:h-screen flex">
       {/* Left Section - Login Form */}
-      <div className="w-full md:w-1/2 h-full flex flex-col justify-center px-8 md:px-16 lg:px-24 relative">
+      <div className="w-full md:w-1/2 min-h-screen md:min-h-0 md:h-full flex flex-col justify-center px-4 md:px-16 lg:px-24 relative py-12 md:py-0 bg-white">
         <div className="max-w-[480px] w-full mx-auto">
           <h1 className="text-4xl font-bold text-gray-900 mb-3">Sign in</h1>
           <p className="text-gray-500 mb-10">
