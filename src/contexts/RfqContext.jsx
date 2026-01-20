@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import supabase from "../libs/Supabase";
 import { useAuth } from "./AuthContext";
 import { toast } from "react-hot-toast";
+import { generateRfqEmailTemplate } from "../utils/emailTemplates";
 
 const RfqContext = createContext();
 
@@ -32,6 +33,35 @@ export const RfqProvider = ({ children }) => {
             if (error) throw error;
 
             toast.success("RFQ created successfully!");
+
+            // --- Email Notification ---
+            try {
+                // Determine user details for email
+                const userEmail = user.email;
+                const userName = user.user_metadata?.full_name || user.email.split('@')[0];
+
+                if (userEmail) {
+                    const emailHtml = generateRfqEmailTemplate(data, userName);
+
+                    // Call Backend API
+                    // Note: This requires the /api/send-email serverless function to be running (vercel dev or deployed)
+                    await fetch('/api/send-email', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            to: userEmail,
+                            subject: 'Your RFQ has been posted! - KarLink',
+                            html: emailHtml
+                        })
+                    });
+                    console.log("Confirmation email sent to", userEmail);
+                }
+            } catch (emailErr) {
+                // Log but don't block the UI
+                console.warn("Email sending failed (this is expected in local dev without 'vercel dev'):", emailErr);
+            }
+            // --------------------------
+
             return { data, error: null };
         } catch (error) {
             console.error("Error creating RFQ:", error);
