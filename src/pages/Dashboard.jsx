@@ -7,6 +7,7 @@ import CreateRfq from "./CreateRfq";
 import RfqDetails from "./RfqDetails";
 import RfqBid from "./RfqBid";
 import YourRfqs from "./YourRfqs";
+import Profile from "./Profile";
 import {
   Home,
   Globe,
@@ -191,21 +192,23 @@ const Dashboard = () => {
             <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
               <Sun size={20} />
             </button>
-            {user?.user_metadata?.avatar_url || user?.user_metadata?.picture ? (
-              <img
-                src={
-                  user.user_metadata.avatar_url || user.user_metadata.picture
-                }
-                alt="Profile"
-                className="w-9 h-9 rounded-full border border-gray-200"
-                referrerPolicy="no-referrer"
-              />
-            ) : (
-              <div className="w-9 h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm border border-orange-200">
-                {user?.user_metadata?.full_name?.charAt(0) ||
-                  user?.email?.charAt(0)}
-              </div>
-            )}
+            <Link to="/profile" className="block">
+              {user?.user_metadata?.avatar_url || user?.user_metadata?.picture ? (
+                <img
+                  src={
+                    user.user_metadata.avatar_url || user.user_metadata.picture
+                  }
+                  alt="Profile"
+                  className="w-9 h-9 rounded-full border border-gray-200 cursor-pointer hover:border-orange-400 transition-all"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <div className="w-9 h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm border border-orange-200 cursor-pointer hover:border-orange-400 transition-all">
+                  {user?.user_metadata?.full_name?.charAt(0) ||
+                    user?.email?.charAt(0)}
+                </div>
+              )}
+            </Link>
           </div>
         </header>
 
@@ -214,6 +217,7 @@ const Dashboard = () => {
           {(() => {
             if (location.pathname === "/market") return <Market />;
             if (location.pathname === "/rfq/create") return <CreateRfq />;
+            if (location.pathname === "/profile") return <Profile />;
             if (location.pathname === "/your-rfqs") return <YourRfqs />;
             if (location.pathname === "/your-bids") return (
               <div className="flex flex-col items-center justify-center h-[50vh] text-gray-400">

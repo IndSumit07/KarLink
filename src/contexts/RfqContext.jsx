@@ -2,7 +2,6 @@ import { createContext, useContext, useState } from "react";
 import supabase from "../libs/Supabase";
 import { useAuth } from "./AuthContext";
 import { toast } from "react-hot-toast";
-import { generateRfqEmailTemplate } from "../utils/emailTemplates";
 
 const RfqContext = createContext();
 
