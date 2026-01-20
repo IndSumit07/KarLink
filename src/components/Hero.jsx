@@ -1,4 +1,6 @@
+import React from "react";
 import { Link } from "react-router-dom";
+import { Globe, ShieldCheck, Zap } from "lucide-react";
 
 const Hero = () => {
   return (
