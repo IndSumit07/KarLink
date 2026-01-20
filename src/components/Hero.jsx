@@ -24,18 +24,10 @@ const Hero = () => {
         </div>
 
         {/* Visuals Section */}
-        <div className="relative mt-16 w-full max-w-6xl mx-auto h-[400px] md:h-[500px] flex justify-center">
+        <div className="relative mt-12 md:mt-16 w-full max-w-6xl mx-auto h-[280px] md:h-[500px] flex justify-center">
           {/* Desktop Frame */}
-          <div
-            className="rounded-2xl bg-white p-2 border border-gray-200 shadow-2xl relative z-10"
-            style={{
-              width: "90%",
-              maxWidth: "800px",
-              height: "100%",
-              maxHeight: "450px",
-            }}
-          >
-            <div className="relative w-full h-full bg-gray-50 rounded-xl overflow-hidden">
+          <div className="rounded-xl md:rounded-2xl bg-white p-1 md:p-2 border border-gray-200 shadow-xl relative z-10 w-[80%] md:w-[90%] max-w-[800px] h-[200px] md:h-full md:max-h-[450px] overflow-hidden">
+            <div className="relative w-full h-full bg-gray-50 rounded-lg md:rounded-xl overflow-hidden">
               <img
                 src="/desktop-preview.png"
                 alt="Desktop Preview"
@@ -44,15 +36,9 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Mobile Frame - Positioned absolutely to overlap */}
-          <div
-            className="hidden md:block absolute top-20 right-4 lg:right-20 z-20 rounded-3xl bg-white p-2 border border-gray-200 shadow-2xl"
-            style={{
-              width: "220px",
-              height: "420px",
-            }}
-          >
-            <div className="w-full h-full bg-gray-50 rounded-2xl overflow-hidden relative">
+          {/* Mobile Frame */}
+          <div className="absolute top-10 -right-2 md:top-20 md:right-20 z-20 rounded-2xl md:rounded-3xl bg-white p-1 md:p-2 border border-gray-200 shadow-2xl w-[90px] h-[180px] md:w-[220px] md:h-[420px]">
+            <div className="w-full h-full bg-gray-50 rounded-xl md:rounded-2xl overflow-hidden relative">
               <img
                 src="/mobile-preview.png"
                 alt="Mobile Preview"
