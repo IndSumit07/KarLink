@@ -1,6 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import supabase from "../libs/Supabase";
-import Loader from "../components/Loader";
 
 const AuthContext = createContext();
 
@@ -9,30 +8,26 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check active session
-        const initSession = async () => {
-            const {
-                data: { session },
-            } = await supabase.auth.getSession();
+        const getSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
             setUser(session?.user ?? null);
             setLoading(false);
         };
-        initSession();
 
-        // Listen for changes
-        const { data: listener } = supabase.auth.onAuthStateChange(
-            (_event, session) => {
-                setUser(session?.user ?? null);
-            }
-        );
+        getSession();
 
-        return () => {
-            listener?.subscription.unsubscribe();
-        };
+        // Listen for changes on auth state (logged in, signed out, etc.)
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+            setLoading(false);
+        });
+
+        return () => subscription.unsubscribe();
     }, []);
 
-    const signUp = (email, password, full_name) => {
-        return supabase.auth.signUp({
+    const signUp = async (email, password, full_name) => {
+        console.log("Attempting signup for:", email, "with metadata:", { full_name });
+        const { data, error } = await supabase.auth.signUp({
             email,
             password,
             options: {
@@ -41,26 +36,32 @@ export const AuthProvider = ({ children }) => {
                 },
             },
         });
+        if (error) {
+            console.error("Supabase Signup Error:", error);
+        } else {
+            console.log("Supabase Signup Success:", data);
+        }
+        return { data, error };
     };
 
-    const signIn = (email, password) => {
-        return supabase.auth.signInWithPassword({
+    const signIn = async (email, password) => {
+        const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password,
         });
+        return { data, error };
     };
 
-    const googleSignIn = () => {
-        return supabase.auth.signInWithOAuth({
-            provider: "google",
-            options: {
-                redirectTo: window.location.origin
-            }
+    const googleSignIn = async () => {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
         });
+        return { data, error };
     };
 
-    const signOut = () => {
-        return supabase.auth.signOut();
+    const signOut = async () => {
+        const { error } = await supabase.auth.signOut();
+        return { error };
     };
 
     const value = {
@@ -73,7 +74,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={value}>
-            {loading ? <Loader /> : children}
+            {!loading && children}
         </AuthContext.Provider>
     );
 };
