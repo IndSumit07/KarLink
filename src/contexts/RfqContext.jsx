@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import supabase from "../libs/Supabase";
 import { useAuth } from "./AuthContext";
 import { toast } from "react-hot-toast";
@@ -73,7 +73,7 @@ export const RfqProvider = ({ children }) => {
 
     // Get all RFQs (for Market)
     const getRfqs = async () => {
-        setLoading(true);
+        // Local loading state in components is preferred to avoid context thrashing
         try {
             const { data, error } = await supabase
                 .from("rfqs")
@@ -85,19 +85,17 @@ export const RfqProvider = ({ children }) => {
         } catch (error) {
             console.error("Error fetching RFQs:", error);
             return { data: null, error };
-        } finally {
-            setLoading(false);
         }
     };
 
     // Get a specific RFQ by ID
-    const getRfqById = async (id) => {
-        setLoading(true);
+    const getRfqById = useCallback(async (id) => {
         try {
             const { data, error } = await supabase
                 .from("rfqs")
-                .select("*, profiles(full_name, avatar_url, email)")
+                .select("*, profiles(full_name, avatar_url, email), bids(*, profiles(full_name, avatar_url, email))")
                 .eq("id", id)
+                .order("created_at", { foreignTable: "bids", ascending: false })
                 .single();
 
             if (error) throw error;
@@ -105,16 +103,13 @@ export const RfqProvider = ({ children }) => {
         } catch (error) {
             console.error("Error fetching RFQ:", error);
             return { data: null, error };
-        } finally {
-            setLoading(false);
         }
-    };
+    }, []);
 
     // Get RFQs for the current user
     const getUserRfqs = async () => {
         if (!user) return { data: null, error: "User not logged in" };
 
-        setLoading(true);
         try {
             const { data, error } = await supabase
                 .from("rfqs")
@@ -127,8 +122,6 @@ export const RfqProvider = ({ children }) => {
         } catch (error) {
             console.error("Error fetching user RFQs:", error);
             return { data: null, error };
-        } finally {
-            setLoading(false);
         }
     };
 

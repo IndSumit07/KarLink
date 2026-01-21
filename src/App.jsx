@@ -87,6 +87,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/order/*"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

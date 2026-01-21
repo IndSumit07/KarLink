@@ -8,6 +8,10 @@ import RfqDetails from "./RfqDetails";
 import RfqBid from "./RfqBid";
 import YourRfqs from "./YourRfqs";
 import Profile from "./Profile";
+import YourOrders from "./YourOrders";
+import YourBids from "./YourBids";
+import OrderDetails from "./OrderDetails";
+import ManageOrder from "./ManageOrder";
 import {
   Home,
   Globe,
@@ -219,20 +223,8 @@ const Dashboard = () => {
             if (location.pathname === "/rfq/create") return <CreateRfq />;
             if (location.pathname === "/profile") return <Profile />;
             if (location.pathname === "/your-rfqs") return <YourRfqs />;
-            if (location.pathname === "/your-bids") return (
-              <div className="flex flex-col items-center justify-center h-[50vh] text-gray-400">
-                <Gavel size={48} className="mb-4 text-gray-300" />
-                <h2 className="text-xl font-bold text-gray-600">Your Bids</h2>
-                <p>Feature coming soon...</p>
-              </div>
-            );
-            if (location.pathname === "/your-orders") return (
-              <div className="flex flex-col items-center justify-center h-[50vh] text-gray-400">
-                <Package size={48} className="mb-4 text-gray-300" />
-                <h2 className="text-xl font-bold text-gray-600">Your Orders</h2>
-                <p>Feature coming soon...</p>
-              </div>
-            );
+            if (location.pathname === "/your-bids") return <YourBids />;
+            if (location.pathname === "/your-orders") return <YourOrders />;
             // Check for Review RFQ route (rfq/:id) but not create or bid
             // Using a simple regex to check if it matches /rfq/something, excluding /rfq/create
             // and checking it doesn't end in /bid
@@ -242,6 +234,14 @@ const Dashboard = () => {
             // Check for Bid route (rfq/:id/bid)
             const isRfqBid = /^\/rfq\/[^/]+\/bid$/.test(location.pathname);
             if (isRfqBid) return <RfqBid />;
+
+            // Check for Manage Order route (order/:id/manage)
+            const manageOrderMatch = location.pathname.match(/^\/order\/([^/]+)\/manage$/);
+            if (manageOrderMatch) return <ManageOrder orderId={manageOrderMatch[1]} />;
+
+            // Check for Order Details route (order/:id)
+            const orderDetailsMatch = location.pathname.match(/^\/order\/([^/]+)$/);
+            if (orderDetailsMatch) return <OrderDetails orderId={orderDetailsMatch[1]} />;
 
             return <DashboardHome />;
           })()}
