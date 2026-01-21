@@ -43,9 +43,10 @@ const Dashboard = () => {
   const { user, signOut } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false); // For mobile
   const [isCollapsed, setIsCollapsed] = useState(false); // For desktop
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const navigate = useNavigate();
 
-  const logout = () => {
+  const handleLogout = () => {
     signOut();
     navigate("/");
   };
@@ -158,7 +159,7 @@ const Dashboard = () => {
             )}
           </Link>
           <button
-            onClick={logout}
+            onClick={() => setShowLogoutConfirm(true)}
             title={isCollapsed ? "Log Out" : ""}
             className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors mt-1 ${isCollapsed ? "justify-center px-2" : ""
               }`}
@@ -247,6 +248,36 @@ const Dashboard = () => {
           })()}
         </main>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm mx-4 transform transition-all scale-100">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mb-4">
+                <LogOut size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Log Out?</h3>
+              <p className="text-gray-500 mb-6">Are you sure you want to sign out of your account?</p>
+
+              <div className="flex w-full gap-3">
+                <button
+                  onClick={() => setShowLogoutConfirm(false)}
+                  className="flex-1 px-4 py-2 rounded-xl text-gray-700 font-medium hover:bg-gray-100 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="flex-1 px-4 py-2 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition-colors shadow-lg shadow-red-200"
+                >
+                  Log Out
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
