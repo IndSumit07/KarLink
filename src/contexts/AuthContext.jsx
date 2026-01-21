@@ -60,8 +60,18 @@ export const AuthProvider = ({ children }) => {
     };
 
     const signOut = async () => {
-        const { error } = await supabase.auth.signOut();
-        return { error };
+        try {
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                console.error("Error signing out:", error);
+            }
+        } catch (error) {
+            console.error("Unexpected error signing out:", error);
+        } finally {
+            // Force clearing of local user state to ensure UI updates
+            // even if the server request fails (e.g. 403 Forbidden)
+            setUser(null);
+        }
     };
 
     const value = {
