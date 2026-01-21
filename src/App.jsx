@@ -80,6 +80,14 @@ const App = () => {
           }
         />
         <Route
+          path="/chats"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/profile"
           element={
             <ProtectedRoute>
@@ -89,6 +97,14 @@ const App = () => {
         />
         <Route
           path="/order/*"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/:userId"
           element={
             <ProtectedRoute>
               <Home />

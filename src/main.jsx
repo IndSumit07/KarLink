@@ -7,13 +7,17 @@ import { RfqProvider } from "./contexts/RfqContext.jsx";
 import { BidProvider } from "./contexts/BidContext.jsx";
 import { OrderProvider } from "./contexts/OrderContext.jsx";
 
+import { ChatProvider } from "./contexts/ChatContext.jsx";
+
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <AuthProvider>
       <RfqProvider>
         <BidProvider>
           <OrderProvider>
-            <App />
+            <ChatProvider>
+              <App />
+            </ChatProvider>
           </OrderProvider>
         </BidProvider>
       </RfqProvider>

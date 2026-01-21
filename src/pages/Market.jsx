@@ -70,8 +70,9 @@ const Market = () => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {orders.map((order) => (
-                        <div key={order.id} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-orange-100/40 transition-all duration-300 group flex flex-col justify-between">
-                            <div>
+                        <div key={order.id} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-orange-100/40 transition-all duration-300 group flex flex-col justify-between relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-orange-50 rounded-bl-full -mr-6 -mt-6 transition-transform group-hover:scale-110"></div>
+                            <div className="relative z-10">
                                 <div className="flex justify-between items-start mb-4">
                                     <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-blue-50 text-blue-700`}>
                                         {/* Since we don't have 'type' in DB yet, using generic or derived */}
@@ -99,21 +100,23 @@ const Market = () => {
                                 </div>
                             </div>
 
-                            <div className="pt-4 border-t border-gray-50 mt-2">
+                            <div className="pt-4 border-t border-gray-50 mt-2 relative z-10">
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 overflow-hidden border border-gray-200 shrink-0">
-                                            {(Array.isArray(order.profiles) ? order.profiles[0] : order.profiles)?.avatar_url ? (
-                                                <img src={(Array.isArray(order.profiles) ? order.profiles[0] : order.profiles).avatar_url} alt="User" className="w-full h-full object-cover" />
-                                            ) : (
-                                                <User size={14} />
-                                            )}
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="truncate max-w-[120px] font-medium text-gray-900" title={(Array.isArray(order.profiles) ? order.profiles[0] : order.profiles)?.full_name}>
-                                                {(Array.isArray(order.profiles) ? order.profiles[0] : order.profiles)?.full_name || "Trader"}
-                                            </span>
-                                        </div>
+                                        <Link to={`/profile/${order.user_id}`} className="group/user flex items-center gap-3 hover:opacity-80 transition-opacity">
+                                            <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 overflow-hidden border border-gray-200 shrink-0 group-hover/user:border-orange-300 transition-colors">
+                                                {(Array.isArray(order.profiles) ? order.profiles[0] : order.profiles)?.avatar_url ? (
+                                                    <img src={(Array.isArray(order.profiles) ? order.profiles[0] : order.profiles).avatar_url} alt="User" className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <User size={14} />
+                                                )}
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="truncate max-w-[120px] font-medium text-gray-900 group-hover/user:text-orange-600 transition-colors" title={(Array.isArray(order.profiles) ? order.profiles[0] : order.profiles)?.full_name}>
+                                                    {(Array.isArray(order.profiles) ? order.profiles[0] : order.profiles)?.full_name || "Trader"}
+                                                </span>
+                                            </div>
+                                        </Link>
                                     </div>
                                     <div className="text-lg font-bold text-gray-900 flex items-center">
                                         {order.budget ? (

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Globe, ShieldCheck, Zap } from "lucide-react";
+import { Globe, ShieldCheck, Zap, FileText, Users, BarChart, Hammer, Mail, Phone, MapPin } from "lucide-react";
 
 const Hero = () => {
   return (
@@ -50,7 +50,7 @@ const Hero = () => {
       </div>
 
       {/* New Section: Why Choose Us */}
-      <div className="bg-gray-50 py-24 px-6 md:px-12 border-t border-gray-100">
+      <div id="features" className="bg-gray-50 py-24 px-6 md:px-12 border-t border-gray-100">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Why Choose KarLink?</h2>
@@ -87,8 +87,148 @@ const Hero = () => {
           </div>
         </div>
       </div>
+
+      {/* Services Section */}
+      <div id="services" className="bg-white py-24 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Our Services</h2>
+            <p className="text-xl text-gray-500 max-w-2xl mx-auto">Comprehensive solutions tailored to streamline your business operations.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Service 1 */}
+            <div className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-2xl transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative z-10">
+                <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 mb-4 group-hover:scale-110 transition-transform">
+                  <FileText size={24} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Smart RFQ System</h3>
+                <p className="text-gray-600 text-sm">Create detailed Requests for Quotations and get precise bids from verified suppliers.</p>
+              </div>
+            </div>
+
+            {/* Service 2 */}
+            <div className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-2xl transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative z-10">
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+                  <Users size={24} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Vendor Connect</h3>
+                <p className="text-gray-600 text-sm">Directly connect with top-rated manufacturers and skilled labor in your industry.</p>
+              </div>
+            </div>
+
+            {/* Service 3 */}
+            <div className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-2xl transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative z-10">
+                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 mb-4 group-hover:scale-110 transition-transform">
+                  <BarChart size={24} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Market Analytics</h3>
+                <p className="text-gray-600 text-sm">Gain insights into market trends and pricing to make informed business decisions.</p>
+              </div>
+            </div>
+
+            {/* Service 4 */}
+            <div className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-2xl transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative z-10">
+                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-green-600 mb-4 group-hover:scale-110 transition-transform">
+                  <Hammer size={24} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Production Tracking</h3>
+                <p className="text-gray-600 text-sm">Monitor order progress in real-time from production to delivery.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Contact Section */}
+      <div id="contact" className="bg-orange-50 py-24 px-6 md:px-12 relative overflow-hidden">
+        {/* Abstract Background Shapes */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-orange-200/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-300/40 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-4xl font-extrabold text-gray-900 mb-6">Let's Build Something Great Together</h2>
+              <p className="text-gray-600 text-lg mb-8 leading-relaxed">
+                Have questions or need assistance? Our dedicated support team is here to help you navigate KarLink and maximize your business potential.
+              </p>
+
+              <div className="space-y-6">
+                <div className="flex items-center gap-4 group">
+                  <div className="w-12 h-12 bg-white shadow-md rounded-xl flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-all duration-300">
+                    <Mail size={20} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Email Us</p>
+                    <p className="font-semibold text-lg text-gray-900">support@karlink.com</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 group">
+                  <div className="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center text-orange-500 group-hover:bg-orange-600 group-hover:text-white transition-all duration-300">
+                    <Phone size={20} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Call Us</p>
+                    <p className="font-semibold text-lg">+91 98765 43210</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 group">
+                  <div className="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center text-orange-500 group-hover:bg-orange-600 group-hover:text-white transition-all duration-300">
+                    <MapPin size={20} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Visit Us</p>
+                    <p className="font-semibold text-lg">123 Business Hub, Tech City</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-3xl shadow-xl border border-orange-100">
+              <form className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                    <input type="text" className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-gray-900 transition-all placeholder:text-gray-400" placeholder="John" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                    <input type="text" className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-gray-900 transition-all placeholder:text-gray-400" placeholder="Doe" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                  <input type="email" className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-gray-900 transition-all placeholder:text-gray-400" placeholder="john@example.com" />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                  <textarea rows="4" className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-gray-900 transition-all placeholder:text-gray-400 resize-none" placeholder="How can we help you?"></textarea>
+                </div>
+
+                <button type="button" className="w-full bg-orange-600 text-white py-4 rounded-xl font-bold hover:bg-orange-700 transition duration-300 shadow-lg shadow-orange-200 transform hover:-translate-y-1">
+                  Send Message
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default Hero;
+

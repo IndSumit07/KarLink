@@ -67,8 +67,9 @@ const Profile = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Left Column - Avatar Card */}
                 <div className="md:col-span-1">
-                    <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center text-center">
-                        <div className="relative group mb-4">
+                    <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center text-center relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-orange-50 rounded-bl-full -mr-6 -mt-6"></div>
+                        <div className="relative group mb-4 z-10">
                             {user?.user_metadata?.avatar_url || user?.user_metadata?.picture ? (
                                 <img
                                     src={user.user_metadata.avatar_url || user.user_metadata.picture}

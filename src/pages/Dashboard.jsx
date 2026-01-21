@@ -8,10 +8,12 @@ import RfqDetails from "./RfqDetails";
 import RfqBid from "./RfqBid";
 import YourRfqs from "./YourRfqs";
 import Profile from "./Profile";
+import PublicProfile from "./PublicProfile";
 import YourOrders from "./YourOrders";
 import YourBids from "./YourBids";
 import OrderDetails from "./OrderDetails";
 import ManageOrder from "./ManageOrder";
+import Chats from "./Chats";
 import {
   Home,
   Globe,
@@ -35,7 +37,8 @@ import {
   PanelLeft,
   ShoppingBag,
   Package,
-  Gavel
+  Gavel,
+  MessageSquare
 } from "lucide-react";
 
 const Dashboard = () => {
@@ -70,6 +73,7 @@ const Dashboard = () => {
         { name: "Your RFQs", icon: FileText, path: "/your-rfqs" },
         { name: "Your Bids", icon: Gavel, path: "/your-bids" },
         { name: "Your Orders", icon: Package, path: "/your-orders" },
+        { name: "Chats", icon: MessageSquare, path: "/chats" },
       ],
     },
   ];
@@ -226,11 +230,17 @@ const Dashboard = () => {
             if (location.pathname === "/your-rfqs") return <YourRfqs />;
             if (location.pathname === "/your-bids") return <YourBids />;
             if (location.pathname === "/your-orders") return <YourOrders />;
+            if (location.pathname === "/chats") return <Chats />;
             // Check for Review RFQ route (rfq/:id) but not create or bid
             // Using a simple regex to check if it matches /rfq/something, excluding /rfq/create
             // and checking it doesn't end in /bid
             const isRfqDetail = /^\/rfq\/[^/]+$/.test(location.pathname) && location.pathname !== "/rfq/create";
             if (isRfqDetail) return <RfqDetails />;
+
+            // Check for Public Profile route (profile/:id)
+            // Note: /profile matches own profile, /profile/:id matches public
+            const publicProfileMatch = location.pathname.match(/^\/profile\/([^/]+)$/);
+            if (publicProfileMatch) return <PublicProfile />;
 
             // Check for Bid route (rfq/:id/bid)
             const isRfqBid = /^\/rfq\/[^/]+\/bid$/.test(location.pathname);

@@ -4,6 +4,8 @@ import { useParams, Link, useLocation } from 'react-router-dom';
 import { useRfq } from '../contexts/RfqContext';
 import { useBid } from '../contexts/BidContext';
 import { useAuth } from '../contexts/AuthContext';
+import { useChat } from '../contexts/ChatContext';
+import { useNavigate } from 'react-router-dom';
 import {
     FileText,
     ArrowLeft,
@@ -30,6 +32,8 @@ const RfqDetails = () => {
     const { getRfqById } = useRfq();
     const { createBid, getBidsByRfqId, acceptBid } = useBid();
     const { user } = useAuth();
+    const { createOrGetChat } = useChat();
+    const navigate = useNavigate();
 
     const [rfq, setRfq] = useState(null);
     const [bids, setBids] = useState([]);
@@ -100,6 +104,19 @@ const RfqDetails = () => {
         setBidLoading(false);
     };
 
+    const handleChat = async (targetUserId) => {
+        if (!targetUserId || !user) return;
+        try {
+            const chatId = await createOrGetChat(targetUserId);
+            if (chatId) {
+                navigate('/chats', { state: { chatId } });
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Could not start chat");
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-full min-h-[60vh]">
@@ -156,9 +173,10 @@ const RfqDetails = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Content - Left Side */}
                 <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden relative">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -mr-8 -mt-8"></div>
                         {/* Header Section */}
-                        <div className="p-6 lg:p-8 border-b border-gray-100 bg-gray-50/50">
+                        <div className="p-6 lg:p-8 border-b border-gray-100 bg-gray-50/50 relative z-10">
                             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                                 <div>
                                     <div className="flex items-center gap-3 mb-3">
@@ -182,6 +200,15 @@ const RfqDetails = () => {
                                             <span className="text-xs text-gray-500">Posted by</span>
                                             <span className="text-sm font-bold text-gray-900 leading-none">{(Array.isArray(rfq.profiles) ? rfq.profiles[0] : rfq.profiles)?.full_name || "Trader"}</span>
                                         </div>
+                                        {user && rfq.user_id !== user.id && (
+                                            <button
+                                                onClick={() => handleChat(rfq.user_id)}
+                                                className="ml-2 p-1.5 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                                                title="Chat with Vendor"
+                                            >
+                                                <MessageSquare size={16} />
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
 
@@ -304,8 +331,9 @@ const RfqDetails = () => {
                     </div>
 
                     {/* Recent Bids List */}
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                        <div className="p-5 border-b border-gray-100 flex justify-between items-center">
+                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden relative">
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -mr-6 -mt-6"></div>
+                        <div className="p-5 border-b border-gray-100 flex justify-between items-center relative z-10">
                             <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
                                 <TrendingDown size={20} className="text-blue-600" />
                                 Recent Bids
@@ -322,8 +350,8 @@ const RfqDetails = () => {
                                 bids.map((bid) => (
                                     <div key={bid.id} className={`p-5 transition-colors cursor-default group ${bid.status === 'accepted' ? 'bg-green-50/60' : 'hover:bg-gray-50'}`}>
                                         <div className="flex justify-between items-start mb-2">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 border border-gray-200 overflow-hidden">
+                                            <Link to={`/profile/${bid.bidder_id || bid.user_id}`} className="group/bidder flex items-center gap-2 hover:opacity-80 transition-opacity">
+                                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 border border-gray-200 overflow-hidden group-hover/bidder:border-orange-300 transition-colors">
                                                     {(Array.isArray(bid.profiles) ? bid.profiles[0] : bid.profiles)?.avatar_url ? (
                                                         <img src={(Array.isArray(bid.profiles) ? bid.profiles[0] : bid.profiles).avatar_url} alt="Bidder" className="w-full h-full object-cover" />
                                                     ) : (
@@ -331,12 +359,27 @@ const RfqDetails = () => {
                                                     )}
                                                 </div>
                                                 <div>
-                                                    <div className="text-sm font-bold text-gray-900">{(Array.isArray(bid.profiles) ? bid.profiles[0] : bid.profiles)?.full_name || "Unknown Bidder"}</div>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="text-sm font-bold text-gray-900 group-hover/bidder:text-orange-600 transition-colors">{(Array.isArray(bid.profiles) ? bid.profiles[0] : bid.profiles)?.full_name || "Unknown Bidder"}</div>
+                                                        {user && rfq.user_id === user.id && (bid.bidder_id || bid.user_id) !== user.id && (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.preventDefault(); // Prevent link navigation
+                                                                    e.stopPropagation();
+                                                                    handleChat(bid.bidder_id || bid.user_id);
+                                                                }}
+                                                                className="text-gray-400 hover:text-orange-600 transition-colors"
+                                                                title="Message Bidder"
+                                                            >
+                                                                <MessageSquare size={14} />
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                     <div className="text-xs text-gray-400">
                                                         {new Date(bid.created_at).toLocaleDateString()}
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </Link>
                                             <div className="text-right">
                                                 <div className="text-lg font-bold text-gray-900 flex items-center justify-end">
                                                     <IndianRupee size={14} className="text-gray-400 mr-0.5" />
