@@ -267,68 +267,70 @@ const RfqDetails = () => {
                 {/* Right Sidebar - Bids */}
                 <div className="lg:col-span-1 space-y-6">
                     {/* Place Bid Card */}
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                        <div className="p-5 border-b border-gray-100 bg-gradient-to-r from-orange-50 to-orange-100/50">
-                            <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                                <Gavel size={20} className="text-orange-600" />
-                                Place Your Bid
-                            </h3>
-                            <p className="text-xs text-gray-500 mt-1">Submit your best offer for this requirement.</p>
-                        </div>
-                        <div className="p-5 space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Bid Amount (₹)</label>
-                                <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <IndianRupee size={16} className="text-gray-400" />
+                    {user?.id !== rfq.user_id && (
+                        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                            <div className="p-5 border-b border-gray-100 bg-gradient-to-r from-orange-50 to-orange-100/50">
+                                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                                    <Gavel size={20} className="text-orange-600" />
+                                    Place Your Bid
+                                </h3>
+                                <p className="text-xs text-gray-500 mt-1">Submit your best offer for this requirement.</p>
+                            </div>
+                            <div className="p-5 space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Bid Amount (₹)</label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <IndianRupee size={16} className="text-gray-400" />
+                                        </div>
+                                        <input
+                                            type="number"
+                                            placeholder="0.00"
+                                            min="0"
+                                            className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl focus:ring-orange-500 focus:border-orange-500 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                            value={bidAmount}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                if (!val || parseFloat(val) >= 0) {
+                                                    setBidAmount(val);
+                                                }
+                                            }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === '-' || e.key === '+' || e.key === 'e') {
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                        />
                                     </div>
-                                    <input
-                                        type="number"
-                                        placeholder="0.00"
-                                        min="0"
-                                        className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl focus:ring-orange-500 focus:border-orange-500 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                        value={bidAmount}
-                                        onChange={(e) => {
-                                            const val = e.target.value;
-                                            if (!val || parseFloat(val) >= 0) {
-                                                setBidAmount(val);
-                                            }
-                                        }}
-                                        onKeyDown={(e) => {
-                                            if (e.key === '-' || e.key === '+' || e.key === 'e') {
-                                                e.preventDefault();
-                                            }
-                                        }}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                                    <textarea
+                                        className="block w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-orange-500 focus:border-orange-500 transition-colors min-h-[100px] resize-none"
+                                        placeholder="Describe your offer, delivery time, etc..."
+                                        value={bidMessage}
+                                        onChange={(e) => setBidMessage(e.target.value)}
                                     />
                                 </div>
+                                <button
+                                    onClick={handlePlaceBid}
+                                    disabled={bidLoading}
+                                    className="w-full bg-orange-600 text-white font-bold py-3 rounded-xl hover:bg-orange-700 transition-colors shadow-md shadow-orange-100 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                                    {bidLoading ? (
+                                        <>
+                                            <Loader2 size={18} className="animate-spin" />
+                                            Submitting...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Send size={18} />
+                                            Submit Bid
+                                        </>
+                                    )}
+                                </button>
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                                <textarea
-                                    className="block w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-orange-500 focus:border-orange-500 transition-colors min-h-[100px] resize-none"
-                                    placeholder="Describe your offer, delivery time, etc..."
-                                    value={bidMessage}
-                                    onChange={(e) => setBidMessage(e.target.value)}
-                                />
-                            </div>
-                            <button
-                                onClick={handlePlaceBid}
-                                disabled={bidLoading}
-                                className="w-full bg-orange-600 text-white font-bold py-3 rounded-xl hover:bg-orange-700 transition-colors shadow-md shadow-orange-100 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
-                                {bidLoading ? (
-                                    <>
-                                        <Loader2 size={18} className="animate-spin" />
-                                        Submitting...
-                                    </>
-                                ) : (
-                                    <>
-                                        <Send size={18} />
-                                        Submit Bid
-                                    </>
-                                )}
-                            </button>
                         </div>
-                    </div>
+                    )}
 
                     {/* Recent Bids List */}
                     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden relative">
